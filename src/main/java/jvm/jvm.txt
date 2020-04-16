@@ -1,0 +1,44 @@
+
+
+
+                    编译                              运行--调用类加载器classloder双亲委派模型
+idea----jdk --javac----(jdk里面有javac 和 java).class-------------------------------编译到jvm里面    class字节码表
+
+线程共享区
+分为 线程共享区 和 非共享区
+
+八种数据类型 byte short int  long float double boolean char
+
+线程共享区（堆）分为
+1  方法区（元数据空间，永久代）：
+    类信息，方法，常量，静态变量
+
+
+
+2  java堆
+
+
+   public class User{
+        private int a;
+        private int b;
+        private static String name;
+
+   }
+    User user1 =new User();
+    User user1 =new User();
+
+
+ 非共享区（java栈）
+1 程序计数器
+
+
+2 本地方法栈
+
+
+3  java虚拟机栈
+
+
+
+类加载器
+
+bootstrap 核心加载器 jdk/jre /bin /rt.jar
