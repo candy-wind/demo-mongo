@@ -1,0 +1,28 @@
+java 序列化实现
+
+序列化 将对象转化为字节序列的过程。
+反序列化 吧字节转化为对象的过程
+
+
+为什么需要反序列化
+两个进程通信 需要二进制序列形式传送
+
+
+普通序列化
+
+序列化
+1 创建一个对象输出流 objectoutputstream
+2 调用objectoutputstream 对象的writeobject输出可序列化对象
+
+反序列化
+1 创建一个对象输出流 objectintputstream
+2 调用objectinputstream 对象的readobject输出可序列化对象
+
+序列化必须实现序列化接口Serializable
+
+同一个对象序列化多次不会序列化多次
+
+
+java序列化算法
+ 保存到磁盘对象都有一个序列化编码好
+

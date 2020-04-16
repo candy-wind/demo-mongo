@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+
+    <context:component-scan base-package="com.example.demomongo.property"></context:component-scan>
+
+    <!--    <bean id="user" class="com.example.demomongo.springcontext.User" scope="prototype"></bean>-->
+<!--&lt;!&ndash;    静态工厂方式创建&ndash;&gt;-->
+<!--    <bean id="bean" class="com.example.demomongo.springcontext.BeanFactory" factory-method="getBean"></bean>-->
+
+<!--    <bean id="demo1" class="com.example.demomongo.param.PropertyDemo">-->
+<!--        <constructor-arg name="username" value="xiaowang"></constructor-arg>-->
+
+<!--    </bean>-->
+<!--    <bean id="book" class="com.example.demomongo.param.Book">-->
+<!--        <property name="bookname" value="平凡的世界"></property>-->
+<!--    </bean>-->
+
+<!--&lt;!&ndash;    注入对象类型的属性&ndash;&gt;-->
+<!--    <bean id="userDao" class="com.example.demomongo.ioc.UserDao" ></bean>-->
+<!--    <bean id="userService" class="com.example.demomongo.ioc.UserService" >-->
+<!--&lt;!&ndash;     name写的是service里面的属性   ref 注释dao对象&ndash;&gt;-->
+<!--        <property name="userDao" ref="userDao"></property>-->
+<!--    </bean>-->
+
+    <!--    p名称空间。。。注入-->
+<!--    <bean id="person" class="com.example.demomongo.param.Person" p:pname="lucy"></bean>-->
+
+<!--    注入复杂类型的属性之-->
+
+    <bean id="person" class="com.example.demomongo.param.Person" >
+
+        <property name="arrs" >
+            <list>
+                <value>小王
+                </value>
+
+            </list>
+        </property>
+
+        <property name="list">
+            <list>
+                <value>小松</value>
+                <value>小松</value>
+            </list>
+        </property>
+        <property name="map">
+            <map>
+                <entry key="aa" value="xiao"></entry>
+                <entry key="bb" value="xiao2"></entry>
+
+            </map>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="aa">com</prop>
+                <prop key="bbb">root</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>
