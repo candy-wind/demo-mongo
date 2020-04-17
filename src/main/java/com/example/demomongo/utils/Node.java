@@ -1,5 +1,7 @@
 package com.example.demomongo.utils;
 
+import java.util.LinkedList;
+
 /**
  * @Author candy-wind
  * @Data: 2020-04-16 11:26
@@ -45,5 +47,10 @@ public class Node {
 
     public void setElement(Object element) {
         this.element = element;
+    }
+
+
+    public static void main(String[] args) {
+        LinkedList linkedList ;
     }
 }
