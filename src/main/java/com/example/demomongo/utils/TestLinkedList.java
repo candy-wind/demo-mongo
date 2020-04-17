@@ -1,30 +1,19 @@
 package com.example.demomongo.utils;
 
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.LinkedList;
-
 /**
  * @Author candy-wind
  * @Data: 2020-04-16 11:15
  * @Version 1.0
  */
-public class TestLinkedList
-{
-
-//    LinkedList
+public class TestLinkedList {
 
     private Node first;
     private Node last;
-
-
-
     private int size;
 
 
     public void add(Object object){
         Node node =new Node(object);
-
         if(first == null){
             first = node;
             last =node;
@@ -34,7 +23,6 @@ public class TestLinkedList
             last.next =node;
             last = node;
         }
-
     }
 
     public static void main(String[] args) {
@@ -45,7 +33,6 @@ public class TestLinkedList
         System.out.println(testLinkedList);
     }
 
-//
     @Override
     public String toString() {
        Node node = first;
