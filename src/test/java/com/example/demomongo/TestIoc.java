@@ -41,15 +41,15 @@ public class TestIoc {
 
 
 //        //注入对象
-        ApplicationContext context =new ClassPathXmlApplicationContext("bean.xml");
-        UserService userService = (UserService) context.getBean("userService");
-        userService.add();
-        System.getProperty("java.class.path");
+//        ApplicationContext context =new ClassPathXmlApplicationContext("bean.xml");
+//        UserService userService = (UserService) context.getBean("userService");
+//        userService.add();
+//        System.getProperty("java.class.path");
 
 //        //注入对象 加在spring配置文件创建对象
-//        ApplicationContext context =new ClassPathXmlApplicationContext("bean.xml");
-//        Person person = (Person) context.getBean("person");
-//        person.test1();
+        ApplicationContext context =new ClassPathXmlApplicationContext("bean.xml");
+        Person person = (Person) context.getBean("person");
+        person.test1();
 
 //        //注入对象 加在spring配置文件创建对象
 //        ApplicationContext context =new ClassPathXmlApplicationContext("bean.xml");
