@@ -45,7 +45,7 @@ public class DoubleTree {
     }
 
     public void showNode(Node node){
-        System.out.println(node.getValue());//前序便利
+        System.out.print(node.getValue());//前序便利
         if(node.getLeft()!=null){
             showNode(node.getLeft());
         }
@@ -59,15 +59,25 @@ public class DoubleTree {
     }
 
     public static void main(String[] args) {
-        DoubleTree doubleTree = new DoubleTree();
-        doubleTree.add(5);
-        doubleTree.add(1);
-        doubleTree.add(4);
-        doubleTree.add(8);
-        doubleTree.add(2);
-        doubleTree.add(7);
-        doubleTree.add(9);
-        doubleTree.add(3);
-        doubleTree.show();
+//        DoubleTree doubleTree = new DoubleTree();
+//        doubleTree.add(5);
+//        doubleTree.add(1);
+//        doubleTree.add(4);
+//        doubleTree.add(8);
+//        doubleTree.add(2);
+//        doubleTree.add(7);
+//        doubleTree.add(9);
+//        doubleTree.add(3);
+//        doubleTree.show();
+
+       int nums[] = {4,5,6,7,0,1,2,3};
+
+       int left = 0;
+       int right = nums.length - 1;
+        System.out.println(right);
+
+       int mid = (left + right)/2;
+        System.out.println(mid);
+
     }
 }
