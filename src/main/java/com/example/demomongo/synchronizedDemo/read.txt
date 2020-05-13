@@ -1,0 +1,21 @@
+synchronized底层实现过程:
+    monitorenter
+    执行过程中锁自动升级 偏向锁 轻量级锁（资源竞争） 为了解决线程等待自旋 消耗cpu 有了下面的重量级锁 重量级锁
+    lock comexchg
+
+    锁粗化
+        循环里面的的对象把锁自动放在外面
+
+    锁消除
+    public void add(){
+            StringBUffer sb = new StringBUffer(); 在一个方法里面每次添加 直接消除了
+            栈私有局部变量 jvm自动消除对象内部的锁
+    }
+
+
+
+cas问题 ：
+ 比较和交换 每次都要比较当前值和新值
+
+cas中的aba问题：
+ 你的对象分了以后和别人处了 然后有和你在一起了
