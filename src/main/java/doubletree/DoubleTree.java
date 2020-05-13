@@ -59,16 +59,16 @@ public class DoubleTree {
     }
 
     public static void main(String[] args) {
-//        DoubleTree doubleTree = new DoubleTree();
-//        doubleTree.add(5);
-//        doubleTree.add(1);
-//        doubleTree.add(4);
-//        doubleTree.add(8);
-//        doubleTree.add(2);
-//        doubleTree.add(7);
-//        doubleTree.add(9);
-//        doubleTree.add(3);
-//        doubleTree.show();
+        DoubleTree doubleTree = new DoubleTree();
+        doubleTree.add(5);
+        doubleTree.add(1);
+        doubleTree.add(4);
+        doubleTree.add(8);
+        doubleTree.add(2);
+        doubleTree.add(7);
+        doubleTree.add(9);
+        doubleTree.add(3);
+        doubleTree.show();
 
        int nums[] = {4,5,6,7,0,1,2,3};
 
