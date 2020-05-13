@@ -10,6 +10,9 @@ package doubletree;
 public class Node {
 
     int value;
+    Node left;
+    Node right;
+
 
     public int getValue() {
         return value;
@@ -35,8 +38,7 @@ public class Node {
         this.right = right;
     }
 
-    Node left;
-    Node right;
+
 
     public Node(int value){
         this.value = value;
