@@ -1,0 +1,33 @@
+
+
+
+elasticsearch文件目录结构
+
+bin 脚本文件 启动elasticsearch 运行统计数据的等
+config  集群配置文件
+jdk   java运行环境
+data    path。data数据文件
+lib         java类库
+logs        日志文件
+moudles             es模块
+plupins     安装插件
+
+
+
+jvm配置
+修改jvm config/jvm/options
+7.1下载的默认设置是1gb
+配置建议
+xmx和xms设置一样
+xmx不要超过机器内存50%
+内存总量不超过30gb
+
+
+启动elasticsearch
+
+
+运行多个节点的
+
+./elasticsearch -E node.name=node0 -E cluster.name=geektime -E path.data=node0_data -d
+./elasticsearch -E node.name=node1 -E cluster.name=geektime -E path.data=node1_data -d
+./elasticsearch -E node.name=node2 -E cluster.name=geektime -E path.data=node2_data -d
