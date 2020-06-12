@@ -1,6 +1,5 @@
 package thradlocal;
 
-import com.sun.tools.internal.xjc.reader.dtd.TDTDReader;
 
 /**
  * @Author candy-wind

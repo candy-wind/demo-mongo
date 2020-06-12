@@ -41,7 +41,7 @@ public class TestHashMap {
     public static void main(String[] args) {
         HashMap<String,String> hashMap = new HashMap();
         hashMap.put("1","2");
-        String value = hashMap.put("1","3");
+        String value = hazshMap.put("1","3");
 
 //        hashMap.hash(a);
 //        hash(key);
