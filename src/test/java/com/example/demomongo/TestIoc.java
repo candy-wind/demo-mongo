@@ -6,12 +6,19 @@ import com.example.demomongo.param.Person;
 import com.example.demomongo.param.PropertyDemo;
 import com.example.demomongo.property.UserService;
 import com.example.demomongo.springcontext.User;
+import crawler.CMRequest;
+import crawler.LoginInfo;
 import org.junit.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 /**
  * @Author candy-wind
@@ -23,6 +30,9 @@ public class TestIoc {
 
     @Autowired
     WebApplicationContext webApplicationContext;
+    @Autowired
+    CMRequest cmRequest;
+
     @Test
     public void testUser(){
 ////        webApplicationContext.
