@@ -103,3 +103,42 @@ docker cp  容器id:目录/文件名字 主机目录
 安装nginx
 docker pull nginx
 docker run -d --name nginx01 -p 3344:80 nginx
+
+安装tomcat
+发现问题 linux命令少了
+没有webapps下面没有文件 需要拷贝 阿里云镜像的问题 默认是最小的镜像，所有不必要的全部剔除掉 保证最小的运行环境
+
+安装elasticsearch
+爆露的端口很多 十分好耗内存
+数据需要放在安全目录 挂载
+--net somenetwork 网络配置
+-e 环境参数的修改
+$ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms64m -Xmx521m" elasticsearch:7.6.2
+
+
+
+
+docker stats 查看cpu状态
+
+管理镜像的工具
+portainer docker图形化管理工具 提供一个后台面板供我们做操
+
+
+docker镜像加载原理
+ufs 联合文件系统
+bootfs 底层内核
+rootfs
+
+docker分层理解
+
+docker镜像都是只读的 当容器启东时 一个新的可写层呗加载到镜像顶部
+这一层我们通常说的容器，容器一下就叫镜像
+
+我们的操作都在容器层
+
+
+commit镜像
+docker commit 提交容器成为一个新的容器
+
+
+

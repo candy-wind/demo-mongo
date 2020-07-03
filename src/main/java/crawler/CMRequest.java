@@ -2,37 +2,8 @@ package crawler;
 
 import com.alibaba.fastjson.JSON;
 import okhttp3.*;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.config.ConnectionConfig;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.config.SocketConfig;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
-import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.LaxRedirectStrategy;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
-import javax.net.ssl.SSLContext;
-import javax.swing.*;
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.security.KeyStore;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -45,10 +16,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class CMRequest {
 
-    private  String defaultEncoding = "utf-8";
-    private  PoolingHttpClientConnectionManager connManager = null;
-//    private  String time;
-    private  final int TIME_OUT = 30000;
     private static List<String> channelIds = new ArrayList<>();
     static {
         // channelIds.add("12002");
@@ -59,35 +26,47 @@ public class CMRequest {
 
     private static Random random = new Random();
     private static  String channelId = channelIds.get(random.nextInt(channelIds.size()));
-    private  long lastSent = System.currentTimeMillis();
-    private static  String mobile = "13709737424";
-    private static  String pass = "123123";
-    public CMRequest() {
-//        time = CalendarUtils.getCurrentTime();
-//        init();
+    private static  String mobile = "";
+
+    private static String getRandomParams(){
+                        //黑龙江，北京，安徽，重庆，福建,广东，广西，甘肃,贵州, 河北，河南,海南，湖北,湖南，吉林，江苏,江西,辽宁,内蒙古，宁夏，青海,上海,四川,山东，山西，陕西
+        //天津，新疆 西藏 云南 浙江
+        String[] backUrl = new String[]{"http://www.10086.cn/index/hl/index_451_459.html","http://www.10086.cn/index/bj/index_100_100.html"
+        ,"http://www.10086.cn/index/ah/index_551_551.html","http://www.10086.cn/index/cq/index_230_230.html","http://www.10086.cn/index/fj/index_591_591.html"
+                ,"http://www.10086.cn/index/gd/index_200_200.html","http://www.10086.cn/index/gx/index_771_771.html","http://www.10086.cn/index/gs/index_931_931.html"
+        ,"http://www.10086.cn/index/gz/index_851_851.html","http://www.10086.cn/index/he/index_311_311.html","http://www.10086.cn/index/ha/index_371_371.html"
+        ,"http://www.10086.cn/index/hi/index_898_898.html","http://www.10086.cn/index/hb/index_270_270.html","http://www.10086.cn/index/hn/index_731_731.html"
+        ,"http://www.10086.cn/index/jl/index_431_431.html","http://www.10086.cn/index/js/index_250_250.html","http://www.10086.cn/index/jx/index_791_791.html"
+        ,"http://www.10086.cn/index/ln/index_240_240.html","http://www.10086.cn/index/nm/index_471_471.html","http://www.10086.cn/index/nx/index_951_951.html"
+        ,"http://www.10086.cn/index/qh/index_971_971.html","http://www.10086.cn/index/sh/index_210_210.html","http://www.10086.cn/index/sc/index_280_280.html"
+        ,"http://www.10086.cn/index/sd/index_531_531.html","http://www.10086.cn/index/sx/index_351_351.html","http://www.10086.cn/index/sn/index_290_290.html"
+        ,"http://www.10086.cn/index/tj/index_220_220.html","http://www.10086.cn/index/xj/index_991_991.html","http://www.10086.cn/index/xz/index_891_891.html"
+        ,"http://www.10086.cn/index/yn/index_871_871.html","http://www.10086.cn/index/zj/index_571_571.html"};
+        return backUrl[random.nextInt(backUrl.length)];
     }
 
     public static void main(String[] args) {
-//
+//        getRandomParams();
+//        System.out.println( getRandomParams());
 //        try {
-//            System.out.println(encryptPassword("34343"));
+//            System.out.println(encryptPassword("147258"));
+//            String password = URLEncoder.encode(encryptPassword("147258"), "utf-8");
+//            System.out.println(password);
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
         LoginInfo loginInfo =new LoginInfo("1231");
         CMRequest cmRequest = new CMRequest();
-        String captcha =cmRequest.loadCaptchaCode(loginInfo);
-        System.out.println(captcha);
+        cmRequest.loadCaptchaCode(loginInfo);
         try {
-//            BufferedReader bufr = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
-//            System.out.println("输入图片验证码：");
-//            captcha = bufr.readLine();
-
-            cmRequest.doSendLoginRandombySms(captcha,loginInfo);
+            cmRequest.doSendLoginRandombySms(null,loginInfo);
             BufferedReader bufr1 = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
             System.out.println("输入短信验证码：");
             String smsCode = bufr1.readLine();
-            cmRequest.login(loginInfo,smsCode);
+//            BufferedReader bufr = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
+//            System.out.println("输入密码：");
+//            String password = bufr.readLine();
+            cmRequest.login(loginInfo,smsCode,null);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -96,9 +75,9 @@ public class CMRequest {
         }
 
     }
-    public  String loadCaptchaCode(LoginInfo loginInfo) {
-        try {
 
+    private String loadCaptchaCode(LoginInfo loginInfo) {
+        try {
             String url = "https://login.10086.cn/html/login/login.html";
             Request request = new Request.Builder()
                     .url(url)
@@ -107,37 +86,7 @@ public class CMRequest {
             Response response  = getClient(loginInfo).newCall(request).execute();
             response.body().string();
 
-            HttpGet get = new HttpGet(url);
-            get.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-            url = "https://login.10086.cn/checkUidAvailable.action";
-            Request request1 = new Request.Builder()
-                    .url(url)
-                    .get()
-                    .build();
-            Response response1  = getClient(loginInfo).newCall(request1).execute();
-            String content = response1.body().string();
-            System.out.println(content);
-//            url = "https://login.10086.cn/captchazh.htm?type=12&timestamp=";
-//            HttpGet httpGet = new HttpGet(url);
-//            httpGet.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-//            httpGet.addHeader("Accept-Encoding", "gzip, deflate, br");
-//            httpGet.addHeader("Accept-Language", "zh-CN,zh;q=0.9");
-//            httpGet.addHeader("Connection", "keep-alive");
-//            httpGet.addHeader("Host", "login.10086.cn");
-//            CloseableHttpResponse response = client.execute(httpGet);
-//            HttpEntity gzipentity = response.getEntity();
-//            Header[] headers = response.getHeaders("Content-Encoding");
-//            for (Header h : headers) {
-//                if (h.getValue().contains("gzip")) {
-//                    gzipentity = new GzipDecompressingEntity(gzipentity);
-//                    break;
-//                }
-//            }
-//            ByteArrayOutputStream data = new ByteArrayOutputStream(1024);
-//            gzipentity.writeTo(data);
-//            response.close();
-//            String result="data:image/jpg;base64," + crawler.Base64.encode(data.toByteArray());
-//            return result;
+
         return null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -145,24 +94,15 @@ public class CMRequest {
         return null;
     }
 
-    public void doSendLoginRandombySms(String captchaCode, LoginInfo loginInfo) {
+    private void doSendLoginRandombySms(String captchaCode, LoginInfo loginInfo) {
         try {
             Thread.sleep(random.nextInt(500));
-            String url = "http://login.10086.cn/login.html";
-            Request request = new Request.Builder()
-                    .url(url)
-                    .get()
-                    .build();
-            Response response  = getClient(loginInfo).newCall(request).execute();
-            response.body().string();
 //            List<okhttp3.Cookie> cookieStore = loginInfo.getCookieList();
 //            okhttp3.Cookie.Builder builder = new okhttp3.Cookie.Builder().name("CITY_INFO").value("100|10").domain("login.10086.cn").path("/");
 //            cookieStore.add(builder.build());
 
-
-
             // 为了拿到sendflag的cookie
-            url = "https://login.10086.cn/loadSendflag.htm?timestamp=";
+           String url = "https://login.10086.cn/loadSendflag.htm?timestamp=";
             Request request1 = new Request.Builder()
                     .url(url)
                     .get()
@@ -184,7 +124,7 @@ public class CMRequest {
             Request request3 = new Request.Builder()
                     .url(url)
                     .header("Referer", "https://login.10086.cn/login.html")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:32.0) Gecko/20100101 Firefox/33.0")
+//                    .header("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:32.0) Gecko/20100101 Firefox/33.0")
                     .post(formBodyCheck)
                     .build();
             Response response3 =getClient(loginInfo).newCall(request3).execute();
@@ -192,7 +132,7 @@ public class CMRequest {
 
             Thread.sleep(random.nextInt(500));
             // 查看手机号是否需要短信
-            url = "https://login.10086.cn/needVerifyCode.htm?accountType=01&account=15776574262&timestamp="
+            url = "https://login.10086.cn/needVerifyCode.htm?accountType=01&account="+mobile+"&timestamp="
                     + System.currentTimeMillis();
             Request request4 = new Request.Builder()
                     .url(url)
@@ -201,10 +141,6 @@ public class CMRequest {
             Response response4 = getClient(loginInfo).newCall(request4).execute();
             String content = response4.body().string();
 
-            List<Cookie> cookies = loginInfo.getCookieList();
-            for (Cookie cookie:cookies){
-                System.out.println(cookie.name() +"="+cookie.value());
-            }
 
             // 检查手机号
             url = "https://login.10086.cn/chkNumberAction.action";
@@ -270,6 +206,7 @@ public class CMRequest {
 
             System.out.println(content);
             if (content.trim().equals("0")) {
+                //     https://login.10086.cn/sendflag.htm?timestamp=
                 url = "https://login.10086.cn/sendflag.htm?timestamp="+System.currentTimeMillis();
                 Request request8 = new Request.Builder()
                         .url(url)
@@ -277,7 +214,7 @@ public class CMRequest {
                         .build();
                 Response response8  = getClient(loginInfo).newCall(request8).execute();
                 response8.body().string();
-                lastSent = System.currentTimeMillis();
+
             } else if (content.contains("4005")) {
                 String msg = "手机号码有误，请重新输入!";
             } else if (content.contains("1")) {
@@ -303,10 +240,12 @@ public class CMRequest {
      * @author tlg
      * @throws Exception
      */
-    public  void login(LoginInfo loginInfo, String smsCode) {
+    private void login(LoginInfo loginInfo, String smsCode,String p) {
         try {
-
+            String backurl = getRandomParams();
+            System.out.println("adasdasdasdadsadsad"+backurl);
             Thread.sleep(2000);
+            String pass = "147258";
             String password = encryptPassword(pass);
 //            password = URLEncoder.encode(password, "utf-8");
             String url = "https://login.10086.cn/login.htm";
@@ -316,11 +255,11 @@ public class CMRequest {
                     .add("password", password)
                     .add("pwdType", "01")
                     .add("smsPwd", smsCode)
-                    .add("inputCode", "01")
-                    .add("backUrl", "http%3A%2F%2Fwww.10086.cn%2Findex%2Fsd%2Findex_531_535.html%3FWT.mc_id%3DfcUJOwOBpYjgmqogLooj_W9tHmHrZVBOsedSWPWE41592275991.321wm0x124d64o16t6xm0w%3FWT.mc_id%3DfcUJOwOBpYjgmqogLooj_W9tHmHrZVBOsedSWPWE41592275991.321wm0x124d64o16t6xm0w")
+                    .add("inputCode", "")
+                    .add("backUrl", "http%3A%2F%2Fwww.10086.cn%2Findex%2Fhl%2Findex_451_459.html")
                     .add("rememberMe", "0")
                     .add("channelID", channelId)
-                    .add("protocol", "https%3A")
+                    .add("protocol", "https:")
                     .add("loginMode", "01")
                     .add("timestamp", String.valueOf(System.currentTimeMillis()))
                     .build();
@@ -328,43 +267,24 @@ public class CMRequest {
                     .url(url)
                     .header("Accept", "application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Encoding", "gzip, deflate, br")
-                    .header("Referer", "https://login.10086.cn/login.html")
                     .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                    .header("Referer", "https://login.10086.cn/login.html?channelID=12003&backUrl=http://shop.10086.cn/i/?f=billdetailqry")
+                    .header("Referer", "https://login.10086.cn/login.html?channelID="+channelId+"&backUrl=http%3A%2F%2Fwww.10086.cn%2Findex%2Fhl%2Findex_451_459.html")
                     .header("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6")
                     .header("Host", "login.10086.cn")
+                    .header("Origin", "https://login.10086.cn")
+                    .header("Connection", "keep-alive")
                     .header("X-Requested-With", "XMLHttpRequest")
+                    .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36")
                     .post(formBodyCheck2)
                     .build();
             Response response6 =getClient(loginInfo).newCall(request6).execute();
             String content = response6.body().string();
-
-
-
-//            HttpPost httpPost = new HttpPost(url);
-//            httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-//            httpPost.addHeader("Referer", "https://login.10086.cn/login.html?channelID=12003&backUrl=http://shop.10086.cn/i/?f=billdetailqry");
-//            httpPost.addHeader("Accept", "application/json, text/javascript, */*; q=0.01");
-//            httpPost.addHeader("Accept-Encoding", "gzip, deflate, br");
-//            httpPost.addHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6");
-//            httpPost.addHeader("Host", "login.10086.cn");
-//            httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-//
-//           CookieStore cookieStore= loginInfo.getCookieStore();
-//            for(Cookie cookie1:cookieStore.getCookies()){
-//                System.out.println(cookie1.getName()+"="+cookie1.getValue()+""+cookie1.getDomain()+cookie1.getPath());
-//            }
-//            CloseableHttpResponse result = client.execute(httpPost);
-//            String resp = EntityUtils.toString(result.getEntity(),"utf-8");
             System.out.println(content);
-//            result.close();
-
         } catch (Exception e) {
 
             e.printStackTrace();
         }
     }
-
 
     private static String encryptPassword(String str) throws Exception {
         try {
@@ -377,59 +297,6 @@ public class CMRequest {
         return null;
     }
 
-
-//
-////    @PostConstruct
-//    public void init(){
-//        ConnectionConfig connConfig = ConnectionConfig.custom().setCharset(Charset.forName(defaultEncoding)).build();
-//        SocketConfig socketConfig = SocketConfig.custom().setSoTimeout(TIME_OUT).build();
-//        RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.<ConnectionSocketFactory> create();
-//        ConnectionSocketFactory plainSF = new PlainConnectionSocketFactory();
-//        registryBuilder.register("http", plainSF);
-//        KeyStore trustStore = null;
-//        try {
-//            trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-//            SSLContext sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, new AnyTrustStrategy())
-//                    .build();
-//            LayeredConnectionSocketFactory sslSF = new SSLConnectionSocketFactory(sslContext,
-//                    SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-//
-//            registryBuilder.register("https", sslSF);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        Registry<ConnectionSocketFactory> registry = registryBuilder.build();
-//        // 设置连接管理器
-//        if (connManager == null) {
-//            connManager = new PoolingHttpClientConnectionManager(registry);
-//        }
-//        connManager.setDefaultConnectionConfig(connConfig);
-//        connManager.setDefaultSocketConfig(socketConfig);
-//    }
-
-//
-//    private  CloseableHttpClient getHttpClient(LoginInfo loginInfo){
-////        HttpProxy httpProxy = loginInfo.getHttpProxy();
-////        if(null!=httpProxy&&StringUtils.isNotEmpty(httpProxy.getIp())) {
-////            String proxyHost = httpProxy.getIp();
-////            int proxyPort = httpProxy.getPort();
-//        HttpHost httpHost = new HttpHost("223.247.92.128",4216,"http");
-//            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(TIME_OUT).setConnectTimeout(TIME_OUT)
-//                    .setConnectionRequestTimeout(TIME_OUT).setProxy(httpHost).build();
-//            DefaultProxyRoutePlanner defaultProxyRoutePlanner = new DefaultProxyRoutePlanner(httpHost);
-////            CredentialsProvider defaultCredentialsProvider = new BasicCredentialsProvider();
-////            defaultCredentialsProvider.setCredentials(new AuthScope("223.247.92.128", 4216),
-////                    new UsernamePasswordCredentials());
-//            return HttpClients.custom().setDefaultRequestConfig(requestConfig).setRoutePlanner(defaultProxyRoutePlanner)
-//                    .setDefaultCookieStore(loginInfo.getCookieStore())
-//                    .setConnectionManager(connManager).setRedirectStrategy(new LaxRedirectStrategy()).build();
-//////        }else {
-////            return HttpClients.custom().setDefaultCookieStore(loginInfo.getCookieStore()).setConnectionManager(connManager)
-////                    .setRedirectStrategy(new LaxRedirectStrategy()).build();
-//////        }
-//    }
     private OkHttpClient getClient(final LoginInfo loginInfo) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectionPool(new ConnectionPool(5,1,TimeUnit.SECONDS))
@@ -453,7 +320,4 @@ public class CMRequest {
 
         return builder.build();
     }
-
-
-
 }
