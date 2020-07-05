@@ -141,4 +141,8 @@ commit镜像
 docker commit 提交容器成为一个新的容器
 
 
+例子是tomca他 将webapps.dist 文件拷贝到webapps上面  然后提交  以后使用修改后的镜像
+docker commit -a 作者 -m 提交的信息  镜像id  tag
+docker commit -a 'zht' -m 'add webapps' f16af267e534 tomcat02
+
 

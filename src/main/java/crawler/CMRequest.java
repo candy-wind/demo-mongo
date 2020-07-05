@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -18,15 +19,19 @@ public class CMRequest {
 
     private static List<String> channelIds = new ArrayList<>();
     static {
-        // channelIds.add("12002");
+//         channelIds.add("12003");
         // 根据目前的观察，下面两个渠道是可用的
+//        channelIds.add("12002");
         channelIds.add("12034");
-//        channelIds.add("12034");
     }
 
     private static Random random = new Random();
     private static  String channelId = channelIds.get(random.nextInt(channelIds.size()));
+//    private static  String mobile = "17823804704";
     private static  String mobile = "";
+
+
+    //可以成功的   12002 ---》https://shop.10086.cn/mall_451_459.html?forcelogin=1
 
     private static String getRandomParams(){
                         //黑龙江，北京，安徽，重庆，福建,广东，广西，甘肃,贵州, 河北，河南,海南，湖北,湖南，吉林，江苏,江西,辽宁,内蒙古，宁夏，青海,上海,四川,山东，山西，陕西
@@ -55,6 +60,15 @@ public class CMRequest {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+//        String pass = "147258";
+//        String pkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsgDq4OqxuEisnk2F0EJFmw4xKa5IrcqEYHvqxPs2CHEg2kolhfWA2SjNuGAHxyDDE5MLtOvzuXjBx/5YJtc9zj2xR/0moesS+Vi/xtG1tkVaTCba+TV+Y5C61iyr3FGqr+KOD4/XECu0Xky1W9ZmmaFADmZi7+6gO9wjgVpU9aLcBcw/loHOeJrCqjp7pA98hRJRY+MML8MK15mnC4ebooOva+mJlstW6t/1lghR8WNV8cocxgcHHuXBxgns2MlACQbSdJ8c6Z3RQeRZBzyjfey6JCCfbEKouVrWIUuPphBL3OANfgp0B+QG31bapvePTfXU48TYK0M5kE+8LgbbWQIDAQAB";
+//        try {
+//            String password = RSAUtil.encryptByPublicKey(pass, pkey);
+//            System.out.println(password);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
         LoginInfo loginInfo =new LoginInfo("1231");
         CMRequest cmRequest = new CMRequest();
         cmRequest.loadCaptchaCode(loginInfo);
@@ -247,7 +261,6 @@ public class CMRequest {
             Thread.sleep(2000);
             String pass = "147258";
             String password = encryptPassword(pass);
-//            password = URLEncoder.encode(password, "utf-8");
             String url = "https://login.10086.cn/login.htm";
             RequestBody formBodyCheck2 = new FormBody.Builder()
                     .add("accountType", "01")
@@ -256,7 +269,7 @@ public class CMRequest {
                     .add("pwdType", "01")
                     .add("smsPwd", smsCode)
                     .add("inputCode", "")
-                    .add("backUrl", "http%3A%2F%2Fwww.10086.cn%2Findex%2Fhl%2Findex_451_459.html")
+                    .add("backUrl", "http://www.10086.cn/index/hl/index_451_459.html")
                     .add("rememberMe", "0")
                     .add("channelID", channelId)
                     .add("protocol", "https:")
