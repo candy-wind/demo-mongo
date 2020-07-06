@@ -17,17 +17,10 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class CMRequest {
 
-    private static List<String> channelIds = new ArrayList<>();
-    static {
-//         channelIds.add("12003");
-        // 根据目前的观察，下面两个渠道是可用的
-//        channelIds.add("12002");
-        channelIds.add("12034");
-    }
-
+    String[] channelIds  = new String[]{"12002","12003","12034"};
     private static Random random = new Random();
-    private static  String channelId = channelIds.get(random.nextInt(channelIds.size()));
-//    private static  String mobile = "17823804704";
+    private  String channelId = channelIds[random.nextInt(channelIds.length)];
+//    private static  String mobile = "";
     private static  String mobile = "";
 
 
@@ -37,10 +30,20 @@ public class CMRequest {
                         //黑龙江，北京，安徽，重庆，福建,广东，广西，甘肃,贵州, 河北，河南,海南，湖北,湖南，吉林，江苏,江西,辽宁,内蒙古，宁夏，青海,上海,四川,山东，山西，陕西
         //天津，新疆 西藏 云南 浙江
         String[] backUrl = new String[]{"http://www.10086.cn/index/hl/index_451_459.html","http://www.10086.cn/index/bj/index_100_100.html"
-        ,"http://www.10086.cn/index/ah/index_551_551.html","http://www.10086.cn/index/cq/index_230_230.html","http://www.10086.cn/index/fj/index_591_591.html"
-                ,"http://www.10086.cn/index/gd/index_200_200.html","http://www.10086.cn/index/gx/index_771_771.html","http://www.10086.cn/index/gs/index_931_931.html"
+        ,"http://www.10086.cn/index/ah/index_551_551.html","http://www.10086.cn/index/ah/index_551_550.html","http://www.10086.cn/index/ah/index_551_552.html"
+        ,"http://www.10086.cn/index/ah/index_551_553.html","http://www.10086.cn/index/ah/index_551_554.html","http://www.10086.cn/index/ah/index_551_555.html"
+        ,"http://www.10086.cn/index/ah/index_551_556.html","http://www.10086.cn/index/ah/index_551_567.html","http://www.10086.cn/index/cq/index_230_230.html","http://www.10086.cn/index/fj/index_591_591.html"
+                ,"http://www.10086.cn/index/fj/index_591_592.html","http://www.10086.cn/index/fj/index_591_593.html","http://www.10086.cn/index/fj/index_591_594.html"
+                ,"http://www.10086.cn/index/fj/index_591_595.html","http://www.10086.cn/index/fj/index_591_596.html","http://www.10086.cn/index/fj/index_591_597.html"
+                ,"http://www.10086.cn/index/fj/index_591_598.html","http://www.10086.cn/index/fj/index_591_599.html"
+        ,"http://www.10086.cn/index/gd/index_200_200.html","http://www.10086.cn/index/gd/index_200_660.html","http://www.10086.cn/index/gd/index_200_662.html"
+                ,"http://www.10086.cn/index/gd/index_200_663.html","http://www.10086.cn/index/gd/index_200_668.html","http://www.10086.cn/index/gd/index_200_750.html","http://www.10086.cn/index/gd/index_200_751.html"
+                ,"http://www.10086.cn/index/gx/index_771_771.html","http://www.10086.cn/index/gs/index_931_931.html"
         ,"http://www.10086.cn/index/gz/index_851_851.html","http://www.10086.cn/index/he/index_311_311.html","http://www.10086.cn/index/ha/index_371_371.html"
-        ,"http://www.10086.cn/index/hi/index_898_898.html","http://www.10086.cn/index/hb/index_270_270.html","http://www.10086.cn/index/hn/index_731_731.html"
+        ,"http://www.10086.cn/index/hi/index_898_898.html","http://www.10086.cn/index/hb/index_270_270.html","http://www.10086.cn/index/hb/index_270_718.html"
+                ,"http://www.10086.cn/index/hn/index_731_731.html","http://www.10086.cn/index/hb/index_270_710.html","http://www.10086.cn/index/hb/index_270_711.html"
+                ,"http://www.10086.cn/index/hb/index_270_712.html","http://www.10086.cn/index/hb/index_270_713.html","http://www.10086.cn/index/hb/index_270_714.html"
+                ,"http://www.10086.cn/index/hb/index_270_715.html","http://www.10086.cn/index/hb/index_270_716.html","http://www.10086.cn/index/hb/index_270_717.html"
         ,"http://www.10086.cn/index/jl/index_431_431.html","http://www.10086.cn/index/js/index_250_250.html","http://www.10086.cn/index/jx/index_791_791.html"
         ,"http://www.10086.cn/index/ln/index_240_240.html","http://www.10086.cn/index/nm/index_471_471.html","http://www.10086.cn/index/nx/index_951_951.html"
         ,"http://www.10086.cn/index/qh/index_971_971.html","http://www.10086.cn/index/sh/index_210_210.html","http://www.10086.cn/index/sc/index_280_280.html"
@@ -257,7 +260,9 @@ public class CMRequest {
     private void login(LoginInfo loginInfo, String smsCode,String p) {
         try {
             String backurl = getRandomParams();
+            System.out.println("adasdasdasdadsadsad"+channelId);
             System.out.println("adasdasdasdadsadsad"+backurl);
+            System.out.println("adasdasdasdadsadsad"+URLEncoder.encode(backurl));
             Thread.sleep(2000);
             String pass = "147258";
             String password = encryptPassword(pass);
@@ -269,7 +274,7 @@ public class CMRequest {
                     .add("pwdType", "01")
                     .add("smsPwd", smsCode)
                     .add("inputCode", "")
-                    .add("backUrl", "http://www.10086.cn/index/hl/index_451_459.html")
+                    .add("backUrl", backurl)
                     .add("rememberMe", "0")
                     .add("channelID", channelId)
                     .add("protocol", "https:")
@@ -281,7 +286,8 @@ public class CMRequest {
                     .header("Accept", "application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Encoding", "gzip, deflate, br")
                     .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                    .header("Referer", "https://login.10086.cn/login.html?channelID="+channelId+"&backUrl=http%3A%2F%2Fwww.10086.cn%2Findex%2Fhl%2Findex_451_459.html")
+//                    .header("Referer", "https://login.10086.cn/login.html?channelID="+channelId+"&backUrl=http%3A%2F%2Fwww.10086.cn%2Findex%2Fhl%2Findex_451_459.html")
+                    .header("Referer", "https://login.10086.cn/login.html?channelID="+channelId+"&backUrl="+URLEncoder.encode(backurl))
                     .header("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6")
                     .header("Host", "login.10086.cn")
                     .header("Origin", "https://login.10086.cn")
