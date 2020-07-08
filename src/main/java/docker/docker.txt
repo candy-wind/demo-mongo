@@ -4,9 +4,6 @@ uname -r
 cat /etc/os-release
 
 
-
-
-
 镜像：image 好比一个模版通过模版创建容器服务 可以创建多个容器 最后项目在容器运行
 容器：container 通过镜像来创建 可以理解为一个简易的linux系统
 仓库：repository 仓库存放镜像地方 私有和公有
@@ -91,24 +88,24 @@ docker top
 查看镜像元数据
 docker inspect imagesId
 
-进入当前正在运行中的容器
+--------进入当前正在运行中的容器
 
 docker exec -it 容器id /bin/bash  // 进入一个容器后开启一个新的终端，可以在里面操作
 docker attch   进入一个正在运行的容器 不会启动新的终端
 
 
-从容器内拷贝到主机上
+---------从容器内拷贝到主机上
 docker cp  容器id:目录/文件名字 主机目录
 
-安装nginx
+------安装nginx
 docker pull nginx
 docker run -d --name nginx01 -p 3344:80 nginx
 
-安装tomcat
+------安装tomcat
 发现问题 linux命令少了
 没有webapps下面没有文件 需要拷贝 阿里云镜像的问题 默认是最小的镜像，所有不必要的全部剔除掉 保证最小的运行环境
 
-安装elasticsearch
+--------安装elasticsearch
 爆露的端口很多 十分好耗内存
 数据需要放在安全目录 挂载
 --net somenetwork 网络配置
@@ -117,26 +114,20 @@ $ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.ty
 
 
 
-
 docker stats 查看cpu状态
 
-管理镜像的工具
+-----管理镜像的工具
 portainer docker图形化管理工具 提供一个后台面板供我们做操
-
 
 docker镜像加载原理
 ufs 联合文件系统
 bootfs 底层内核
 rootfs
 
-
 ------docker分层理解
-
 docker镜像都是只读的 当容器启东时 一个新的可写层呗加载到镜像顶部
 这一层我们通常说的容器，容器一下就叫镜像
-
 我们的操作都在容器层
-
 
 --------------commit镜像
 docker commit 提交容器成为一个新的容器
@@ -159,5 +150,168 @@ docker commit -a 'zht' -m 'add webapps' f16af267e534 tomcat02
 ----使用数据卷
 方式1：直接使用命令挂载
 docker run -it -v 主机目录:容器内目录
+docker run -it -v /zht/ceshi:/zht nginx /bin/bash
+新建一个
+touch text.java  容器和主机都有这个文件
 
+
+----mysql数据实战
+mysql数据持久化
+docker pull mysql:5.7
+运行容器 挂载
+安装mysql需要配置密码
+-d 后台运行
+-p 端口映射
+-v 卷挂载
+-e 环境配置
+
+[root@VM_0_16_centos ~]# docker run -d -p 3310:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 --name mysql01 mysql:5.7
+启动以后测试链接是否成功
+
+
+
+----具名挂载和匿名挂载
+--匿名挂载
+
+docker run -d --name nginx01  -v /ect/nainx nginx
+docker volume ls 查看所有卷情况
+我们载-v的时候写了容器内的路径 没有容器外的路径
+
+--具名挂载
+
+docker run -d -P --name nginx02  -v juming-nginx:/etc/nginx nginx
+所有的卷没有指定目录的情况下都是在/var/lib/docker/volumes/xxx_data
+我们通过具名挂在很方便找到我们的卷 大多数情况下我们都是用具名挂载
+--如何确定是具名挂载 匿名挂在 指定路径挂载
+-v 容器内路径 #匿名挂载
+-v 卷名：容器内路径 #具名挂在
+-v /宿主机路径：容器内路径 #路径挂载
+
+
+----------ro只读 rw 可读可写  改变读写权限
+docker run -d -P --name nginx02  -v juming-nginx:/etc/nginx:ro nginx
+docker run -d -P --name nginx02  -v juming-nginx:/etc/nginx:rw nginx
+
+
+-------初识dockerfile
+构建docker镜像   命令脚本
+
+创建一个dockerfile文件
+FROM centos
+VOLUME ["volume01","volume02"]
+CMD echo "---end----
+CMD /bin/bash
+
+构建自己的镜像。。
+docker build -f dockerfile -t zht/centos .
+
+启动自己的容器
+docker run -it df44fada1889 /bin/bash
+查看同步目录
+
+docker inspect imagesid
+
+查看里面有个mounts
+映射的目录
+
+------数据卷容器
+多个mysql同步数据
+docker run -it --name docker01 df44fada1889
+[root@VM_0_16_centos ~]# docker run -it --name docker02 --volumes-from docker01 df44fada1889
+
+在docker01创建
+[root@b129a66f6a6b volume01]# touch docker01.text
+发现docker02也存在
+
+
+------dockerfile
+构建步骤
+1。编写一个dockfile文件
+2。docker build 构建一个镜像
+3。docker run 运行一个镜像
+4。docker push发布镜像（dockerhub , 阿里云镜像）
+
+----dockerfile构建过程
+基础知识：
+1。每个保留关键字（指令） 都是必须大写字母
+2。执行从上倒下执行
+3。#表示注释
+4。每一个指令都会创建提交一个新的镜像层，并提交
+
+
+步骤：
+dockerfile面向开发的发布项目 做镜像
+dockerfile 构建文件 相当于源代码
+dockerimages 通过dockerfile构建生成的镜像，最终发布运行的产品
+
+
+----dockerfile指令
+FROM                #基础镜像  一切从这里构建
+MAINTAINER          # 镜像是谁写的 维护者姓名
+RUN                 #镜像构建的时候需要运行的命令
+ADD                 #步骤  搭建tomcat镜像 需要添加tomcat压缩包
+WORKDIR             #镜像的工作目录
+VOLUMES             #容器卷 挂载位置
+EXPOSE              #保留端口设置
+CMD                 #指定容器启动 运行的命令  只有最后一个命令生效 可被替代
+ENTRYPOINT          #指定容器启动 运行的命令  可以追加命令
+ONBUILD             #当构建一个被继承dockerfile这个时候会运行ONBUILD的指令
+COPY                #将我们的文件拷贝到镜像中
+ENV                 #构建时候设置环境变量
+
+----构建自己的centos
+1。编写dockerfile文件
+    FROM CENTOS
+    MAINTAINER zht<1360570982@qq.com>
+    ENV MYPATH /usr/local
+    WORKDIR $MYPATH
+    RUN yum -y install vim
+    RUN yum -y install net-tools
+    EXPOST 80
+    CMD echo $MYPATH
+    CMD echo "---end----"
+    CMD /bin/bash
+
+2。构建镜像
+docker build -f dockerfile -t mycentos:0.1 .
+
+3.启动容器
+docker run -it mycentos:0.1
+
+4。查看镜像是如何安装的
+[root@VM_0_16_centos ~]# docker history a796d745e7a8
+
+CMD 和 ENTRTPOINT
+1。练习cmd
+    FROM centos
+    CMD ["ls","-a"]
+2。构建
+
+ docker build -f dockerfile-cmd -t cmdtest .
+3。运行
+[root@VM_0_16_centos mydockerfile]# docker run 372997fe56fe
+
+.
+..
+.dockerenv
+bin
+dev
+etc
+home
+lib
+lib64
+lost+found
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+[ro
 
