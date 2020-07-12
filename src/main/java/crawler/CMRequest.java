@@ -17,22 +17,25 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class CMRequest {
 
-    String[] channelIds  = new String[]{"12002","12003","12034"};
+    static String[] channelIds  = new String[]{"12002","12003","12034"};
     private static Random random = new Random();
     private  String channelId = channelIds[random.nextInt(channelIds.length)];
-//    private static  String mobile = "";
+//    private  String channelId = "12002";
+    //13811174026
     private static  String mobile = "";
-
+    private static String backurlEncry;
+    private static String backurl;
 
     //可以成功的   12002 ---》https://shop.10086.cn/mall_451_459.html?forcelogin=1
-
+        //不能用的 "http://www.10086.cn/index/jx/index_791_791.html" http://www.10086.cn/index/fj/index_591_591.html http://www.10086.cn/index/sn/index_290_290.html
+    //,"http://www.10086.cn/index/zj/index_571_579.html"，http://www.10086.cn/index/jl/index_431_431.html
     private static String getRandomParams(){
                         //黑龙江，北京，安徽，重庆，福建,广东，广西，甘肃,贵州, 河北，河南,海南，湖北,湖南，吉林，江苏,江西,辽宁,内蒙古，宁夏，青海,上海,四川,山东，山西，陕西
         //天津，新疆 西藏 云南 浙江
         String[] backUrl = new String[]{"http://www.10086.cn/index/hl/index_451_459.html","http://www.10086.cn/index/bj/index_100_100.html"
         ,"http://www.10086.cn/index/ah/index_551_551.html","http://www.10086.cn/index/ah/index_551_550.html","http://www.10086.cn/index/ah/index_551_552.html"
         ,"http://www.10086.cn/index/ah/index_551_553.html","http://www.10086.cn/index/ah/index_551_554.html","http://www.10086.cn/index/ah/index_551_555.html"
-        ,"http://www.10086.cn/index/ah/index_551_556.html","http://www.10086.cn/index/ah/index_551_567.html","http://www.10086.cn/index/cq/index_230_230.html","http://www.10086.cn/index/fj/index_591_591.html"
+        ,"http://www.10086.cn/index/ah/index_551_556.html","http://www.10086.cn/index/ah/index_551_567.html","http://www.10086.cn/index/cq/index_230_230.html"
                 ,"http://www.10086.cn/index/fj/index_591_592.html","http://www.10086.cn/index/fj/index_591_593.html","http://www.10086.cn/index/fj/index_591_594.html"
                 ,"http://www.10086.cn/index/fj/index_591_595.html","http://www.10086.cn/index/fj/index_591_596.html","http://www.10086.cn/index/fj/index_591_597.html"
                 ,"http://www.10086.cn/index/fj/index_591_598.html","http://www.10086.cn/index/fj/index_591_599.html"
@@ -44,64 +47,96 @@ public class CMRequest {
                 ,"http://www.10086.cn/index/hn/index_731_731.html","http://www.10086.cn/index/hb/index_270_710.html","http://www.10086.cn/index/hb/index_270_711.html"
                 ,"http://www.10086.cn/index/hb/index_270_712.html","http://www.10086.cn/index/hb/index_270_713.html","http://www.10086.cn/index/hb/index_270_714.html"
                 ,"http://www.10086.cn/index/hb/index_270_715.html","http://www.10086.cn/index/hb/index_270_716.html","http://www.10086.cn/index/hb/index_270_717.html"
-        ,"http://www.10086.cn/index/jl/index_431_431.html","http://www.10086.cn/index/js/index_250_250.html","http://www.10086.cn/index/jx/index_791_791.html"
+       ,"http://www.10086.cn/index/js/index_250_250.html"
         ,"http://www.10086.cn/index/ln/index_240_240.html","http://www.10086.cn/index/nm/index_471_471.html","http://www.10086.cn/index/nx/index_951_951.html"
         ,"http://www.10086.cn/index/qh/index_971_971.html","http://www.10086.cn/index/sh/index_210_210.html","http://www.10086.cn/index/sc/index_280_280.html"
         ,"http://www.10086.cn/index/sd/index_531_531.html","http://www.10086.cn/index/sx/index_351_351.html","http://www.10086.cn/index/sn/index_290_290.html"
-        ,"http://www.10086.cn/index/tj/index_220_220.html","http://www.10086.cn/index/xj/index_991_991.html","http://www.10086.cn/index/xz/index_891_891.html"
+        ,"http://www.10086.cn/index/tj/index_220_220.html","http://www.10086.cn/index/xj/index_991_991.html","http://www.10086.cn/index/xz/index_891_891.html","http://www.10086.cn/index/xz/index_891_892.html",
+                "http://www.10086.cn/index/xz/index_891_893.html","http://www.10086.cn/index/xz/index_891_894.html","http://www.10086.cn/index/xz/index_891_895.html","http://www.10086.cn/index/xz/index_891_896.html"
+                ,"http://www.10086.cn/index/xz/index_891_897.html","http://www.10086.cn/index/yn/index_871_691.html","http://www.10086.cn/index/yn/index_871_692.html","http://www.10086.cn/index/yn/index_871_870.html"
+                ,"http://www.10086.cn/index/yn/index_871_872.html","http://www.10086.cn/index/yn/index_871_873.html","http://www.10086.cn/index/yn/index_871_874.html","http://www.10086.cn/index/yn/index_871_875.html"
+                ,"http://www.10086.cn/index/yn/index_871_877.html","http://www.10086.cn/index/yn/index_871_878.html","http://www.10086.cn/index/yn/index_871_879.html","http://www.10086.cn/index/yn/index_871_883.html"
+                ,"http://www.10086.cn/index/yn/index_871_886.html","http://www.10086.cn/index/yn/index_871_887.html","http://www.10086.cn/index/yn/index_871_888.html","http://www.10086.cn/index/zj/index_571_570.html"
+                ,"http://www.10086.cn/index/zj/index_571_572.html","http://www.10086.cn/index/zj/index_571_573.html","http://www.10086.cn/index/zj/index_571_574.html","http://www.10086.cn/index/zj/index_571_575.html"
+                ,"http://www.10086.cn/index/zj/index_571_576.html","http://www.10086.cn/index/zj/index_571_577.html","http://www.10086.cn/index/zj/index_571_578.html"
+                ,"http://www.10086.cn/index/zj/index_571_580.html","http://www.10086.cn/index/sn/index_290_911.html","http://www.10086.cn/index/sn/index_290_912.html","http://www.10086.cn/index/sn/index_290_913.html"
+                ,"http://www.10086.cn/index/sn/index_290_914.html","http://www.10086.cn/index/sn/index_290_915.html","http://www.10086.cn/index/sn/index_290_916.html","http://www.10086.cn/index/sn/index_290_917.html"
+                ,"http://www.10086.cn/index/sn/index_290_919.html","http://www.10086.cn/index/sn/index_290_910.html","http://www.10086.cn/index/sx/index_351_359.html","http://www.10086.cn/index/sx/index_351_358.html"
+                ,"http://www.10086.cn/index/sx/index_351_357.html","http://www.10086.cn/index/sx/index_351_356.html","http://www.10086.cn/index/sx/index_351_355.html","http://www.10086.cn/index/sx/index_351_354.html"
+                ,"http://www.10086.cn/index/sx/index_351_353.html","http://www.10086.cn/index/sx/index_351_352.html","http://www.10086.cn/index/sx/index_351_350.html","http://www.10086.cn/index/sx/index_351_349.html"
+                ,"http://www.10086.cn/index/sd/index_531_635.html","http://www.10086.cn/index/sd/index_531_633.html","http://www.10086.cn/index/sd/index_531_632.html","http://www.10086.cn/index/sd/index_531_631.html"
+                ,"http://www.10086.cn/index/sd/index_531_546.html","http://www.10086.cn/index/sd/index_531_543.html","http://www.10086.cn/index/sd/index_531_538.html","http://www.10086.cn/index/sd/index_531_536.html"
+                ,"http://www.10086.cn/index/sd/index_531_535.html","http://www.10086.cn/index/sd/index_531_534.html","http://www.10086.cn/index/sd/index_531_532.html","http://www.10086.cn/index/sd/index_531_533.html"
+                ,"http://www.10086.cn/index/sd/index_531_530.html","http://www.10086.cn/index/sc/index_280_841.html"
         ,"http://www.10086.cn/index/yn/index_871_871.html","http://www.10086.cn/index/zj/index_571_571.html"};
         return backUrl[random.nextInt(backUrl.length)];
     }
 
-    public static void main(String[] args) {
-//        getRandomParams();
-//        System.out.println( getRandomParams());
-//        try {
-//            System.out.println(encryptPassword("147258"));
-//            String password = URLEncoder.encode(encryptPassword("147258"), "utf-8");
-//            System.out.println(password);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        String pass = "147258";
-//        String pkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsgDq4OqxuEisnk2F0EJFmw4xKa5IrcqEYHvqxPs2CHEg2kolhfWA2SjNuGAHxyDDE5MLtOvzuXjBx/5YJtc9zj2xR/0moesS+Vi/xtG1tkVaTCba+TV+Y5C61iyr3FGqr+KOD4/XECu0Xky1W9ZmmaFADmZi7+6gO9wjgVpU9aLcBcw/loHOeJrCqjp7pA98hRJRY+MML8MK15mnC4ebooOva+mJlstW6t/1lghR8WNV8cocxgcHHuXBxgns2MlACQbSdJ8c6Z3RQeRZBzyjfey6JCCfbEKouVrWIUuPphBL3OANfgp0B+QG31bapvePTfXU48TYK0M5kE+8LgbbWQIDAQAB";
-//        try {
-//            String password = RSAUtil.encryptByPublicKey(pass, pkey);
-//            System.out.println(password);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    private String getRandomShop(){
+        String[] backUrl = new String[]{"",""};
+        return null;
+    }
 
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        try {
+            System.out.println(encryptPassword("12331"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//
         LoginInfo loginInfo =new LoginInfo("1231");
         CMRequest cmRequest = new CMRequest();
+         backurl = getRandomParams();
+         backurlEncry = URLEncoder.encode(backurl,"utf-8");
         cmRequest.loadCaptchaCode(loginInfo);
         try {
             cmRequest.doSendLoginRandombySms(null,loginInfo);
             BufferedReader bufr1 = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
             System.out.println("输入短信验证码：");
             String smsCode = bufr1.readLine();
-//            BufferedReader bufr = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
-//            System.out.println("输入密码：");
-//            String password = bufr.readLine();
             cmRequest.login(loginInfo,smsCode,null);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+
         }
 
     }
 
     private String loadCaptchaCode(LoginInfo loginInfo) {
         try {
-            String url = "https://login.10086.cn/html/login/login.html";
-            Request request = new Request.Builder()
+
+//            String url = backurl;
+//            Request request = new Request.Builder()
+//                    .url(url)
+//                    .header("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9")
+//                    .header("Accept-Encoding","gzip, deflate")
+//                    .header("Host","www.10086.cn")
+//                    .header("Connection","keep-alive")
+//                    .header("Referer","http://www.10086.cn/")
+//                    .header("Accept-Language","zh-CN,zh;q=0.9")
+//                    .get()
+//                    .build();
+//            Response response  = getClient(loginInfo).newCall(request).execute();
+//            response.body().string();
+
+            String url = "https://login.10086.cn/html/login/login.html?channelID="+channelId+"&backUrl="+backurlEncry;
+            Request request1 = new Request.Builder()
                     .url(url)
+                    .header("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9")
+                    .header("Accept-Encoding","gzip, deflate, br")
+                    .header("Accept-Language","zh-CN,zh;q=0.9")
+                    .header("Connection","keep-alive")
+                    .header("Referer",backurl)
+                    .header("Host","login.10086.cn")
+                    .header("Accept-Language","zh-CN,zh;q=0.9")
                     .get()
                     .build();
-            Response response  = getClient(loginInfo).newCall(request).execute();
-            response.body().string();
+            Response response1  = getClient(loginInfo).newCall(request1).execute();
+            response1.body().string();
 
 
         return null;
@@ -180,7 +215,7 @@ public class CMRequest {
             Thread.sleep(random.nextInt(500));
             // 检查手机号
 
-
+            String Referer = "https://login.10086.cn/login.html?channelID="+channelId+"&backUrl="+backurlEncry;
             url = "https://login.10086.cn/loadToken.action";
             RequestBody formBodyCheck2 = new FormBody.Builder()
                     .add("userName", mobile)
@@ -189,7 +224,7 @@ public class CMRequest {
                     .url(url)
                     .header("Accept", "application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Encoding", "gzip, deflate")
-                    .header("Referer", "https://login.10086.cn/login.html")
+                    .header("Referer", Referer)
                     .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
                     .header("X-Requested-With", "XMLHttpRequest")
                     .post(formBodyCheck2)
@@ -212,7 +247,7 @@ public class CMRequest {
                     .url(url)
                     .header("Accept", "application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Encoding", "gzip, deflate")
-                    .header("Referer", "https://login.10086.cn/login.html")
+                    .header("Referer", Referer)
                     .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
                     .header("X-Requested-With", "XMLHttpRequest")
                     .header("Xa-before", xaBefore)
@@ -259,13 +294,16 @@ public class CMRequest {
      */
     private void login(LoginInfo loginInfo, String smsCode,String p) {
         try {
-            String backurl = getRandomParams();
+
+            String Referer = "https://login.10086.cn/login.html?channelID="+channelId+"&backUrl="+backurlEncry;
+            System.out.println("adasdasdasdadsadsad"+Referer);
             System.out.println("adasdasdasdadsadsad"+channelId);
             System.out.println("adasdasdasdadsadsad"+backurl);
-            System.out.println("adasdasdasdadsadsad"+URLEncoder.encode(backurl));
+
             Thread.sleep(2000);
-            String pass = "100862";
+            String pass = "";
             String password = encryptPassword(pass);
+            System.out.println(password);
             String url = "https://login.10086.cn/login.htm";
             RequestBody formBodyCheck2 = new FormBody.Builder()
                     .add("accountType", "01")
@@ -276,7 +314,7 @@ public class CMRequest {
                     .add("inputCode", "")
                     .add("backUrl", backurl)
                     .add("rememberMe", "0")
-                    .add("channelID", channelId)
+                    .add("channelID", channelId+"")
                     .add("protocol", "https:")
                     .add("loginMode", "01")
                     .add("timestamp", String.valueOf(System.currentTimeMillis()))
@@ -286,8 +324,7 @@ public class CMRequest {
                     .header("Accept", "application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Encoding", "gzip, deflate, br")
                     .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-//                    .header("Referer", "https://login.10086.cn/login.html?channelID="+channelId+"&backUrl=http%3A%2F%2Fwww.10086.cn%2Findex%2Fhl%2Findex_451_459.html")
-                    .header("Referer", "https://login.10086.cn/login.html?channelID="+channelId+"&backUrl="+URLEncoder.encode(backurl))
+                    .header("Referer", Referer)
                     .header("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6")
                     .header("Host", "login.10086.cn")
                     .header("Origin", "https://login.10086.cn")
@@ -319,7 +356,7 @@ public class CMRequest {
     private OkHttpClient getClient(final LoginInfo loginInfo) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectionPool(new ConnectionPool(5,1,TimeUnit.SECONDS))
-                .connectTimeout(25,TimeUnit.SECONDS)
+                .connectTimeout(30,TimeUnit.SECONDS)
                 .readTimeout(25,TimeUnit.SECONDS)
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
