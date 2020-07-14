@@ -1,9 +1,5 @@
 package com.example.demomongo.thread;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
-import java.sql.SQLOutput;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
