@@ -87,8 +87,8 @@ public class CMRequest {
 //
         LoginInfo loginInfo =new LoginInfo("1231");
         CMRequest cmRequest = new CMRequest();
-         backurl = getRandomParams();
-         backurlEncry = URLEncoder.encode(backurl,"utf-8");
+         backurl = "http://www.10086.cn/index/hl/index_451_459.html";
+         backurlEncry = "http%3A%2F%2Fwww.10086.cn%2Findex%2Fhl%2Findex_451_459.html";
         cmRequest.loadCaptchaCode(loginInfo);
         try {
             cmRequest.doSendLoginRandombySms(null,loginInfo);
@@ -108,21 +108,6 @@ public class CMRequest {
 
     private String loadCaptchaCode(LoginInfo loginInfo) {
         try {
-
-//            String url = backurl;
-//            Request request = new Request.Builder()
-//                    .url(url)
-//                    .header("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9")
-//                    .header("Accept-Encoding","gzip, deflate")
-//                    .header("Host","www.10086.cn")
-//                    .header("Connection","keep-alive")
-//                    .header("Referer","http://www.10086.cn/")
-//                    .header("Accept-Language","zh-CN,zh;q=0.9")
-//                    .get()
-//                    .build();
-//            Response response  = getClient(loginInfo).newCall(request).execute();
-//            response.body().string();
-
             String url = "https://login.10086.cn/html/login/login.html?channelID="+channelId+"&backUrl="+backurlEncry;
             Request request1 = new Request.Builder()
                     .url(url)
@@ -301,7 +286,7 @@ public class CMRequest {
             System.out.println("adasdasdasdadsadsad"+backurl);
 
             Thread.sleep(2000);
-            String pass = "";
+            String pass = "123456";
             String password = encryptPassword(pass);
             System.out.println(password);
             String url = "https://login.10086.cn/login.htm";

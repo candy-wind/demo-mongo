@@ -281,7 +281,14 @@ docker run -it mycentos:0.1
 4。查看镜像是如何安装的
 [root@VM_0_16_centos ~]# docker history a796d745e7a8
 
+
+
 CMD 和 ENTRTPOINT
+自己的dockerfile文件
+    FROM centos
+    VOLUME ["volume01","volume02"]
+    CMD echo "---end----
+    CMD /bin/bash
 1。练习cmd
     FROM centos
     CMD ["ls","-a"]
@@ -315,3 +322,8 @@ usr
 var
 [ro
 
+
+---------dockerdilfe制作tomcat镜像
+
+1。准备镜像文件tomcat压缩包 jdk压缩包
+2。编写dockerfile文件
