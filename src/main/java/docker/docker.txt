@@ -387,3 +387,30 @@ jsp=====
     </body>
     </html>
 
+------发布镜像到dockerhub
+1,,首先登陆
+2，，确定账号可以登陆
+3。。在我们自己的服务器提交镜像
+
+ ----命令
+ [root@VM_0_16_centos test]# docker login -u cndockerstart
+
+ 失败了
+[root@VM_0_16_centos test]# docker push dittomcat
+The push refers to repository [docker.io/library/dittomcat]
+89dd50d692ef: Preparing
+4ff42b6afce1: Preparing
+fa349ab4f099: Preparing
+9cca6ade7505: Preparing
+eb29745b8228: Preparing
+denied: requested access to the resource is denied
+
+-------docker tag 给镜像来个标签
+解决问题
+[root@VM_0_16_centos test]# docker tag f7d8acf21628  cndockerstart/tomcat:2.0
+
+---docker push
+[root@VM_0_16_centos test]# docker push cndockerstart/tomcat:2.0
+
+
+---------docker小结
