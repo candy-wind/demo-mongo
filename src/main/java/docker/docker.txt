@@ -327,3 +327,63 @@ var
 
 1。准备镜像文件tomcat压缩包 jdk压缩包
 2。编写dockerfile文件
+
+---------------------安装tomcat
+FROM centos
+MAINTAINER zhenghetian<1360570982@qq.com>
+COPY readme.txt /usr/local/readme.txt
+ADD jdk-8u231-linux-x64.tar(1).gz /usr/local
+ADD apache-tomcat-9.0.37.tar.gz /usr/local
+RUN yum -y install vim
+ENV MYPATH /usr/local
+WORKDIR $MYPATH
+
+ENV JAVA_HOME /usr/local/jdk1.8.0_231
+ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.37
+ENV CATALINA_BASE /usr/local/apache-tomcat-9.0.37
+ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin
+
+EXPOSE 8080
+
+CMD /usr/local/apache-tomcat-9.0.37/bin/startup.sh && tail -F  /usr/local/apache-tomcat-9.0.37/bin/logs/catalina.out
+
+
+-------------构建
+docker build -t dittomcat
+
+
+-------启动容器
+    docker run -d -p 9090:8080 --name zhttomcat -v /zht/tomcat/test:/usr/local/apache-tomcat-9.0.37/webapps/test -v /zht/tomcat/tomcatlogs/:/usr/local/apache-tomcat-9.0.37/logs dittomcat
+
+---访问测试
+
+----发布项目
+xml======
+    <?xml version="1.0" encoding="UTF-8"?>
+    <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+             http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+             version="2.4">
+
+    </web-app>
+
+
+jsp=====
+    <%@ page language="java" contentType="text/html; charset=UTF-8"
+        pageEncoding="UTF-8"%>
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>zht.hello</title>
+    </head>
+    <body>
+    Hello World!<br/>
+    <%
+    System.out.println("你的 IP 地址 " + request.getRemoteAddr());
+    %>
+    </body>
+    </html>
+

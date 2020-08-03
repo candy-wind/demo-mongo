@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 import java.io.*;
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +22,7 @@ public class CMRequest {
 //    private  String channelId = "12002";
     //13811174026
     private static  String mobile = "";
+    private static String pass = "";
     private static String backurlEncry;
     private static String backurl;
 
@@ -108,7 +108,7 @@ public class CMRequest {
 
     private String loadCaptchaCode(LoginInfo loginInfo) {
         try {
-            String url = "https://login.10086.cn/html/login/login.html?channelID="+channelId+"&backUrl="+backurlEncry;
+            String url = "https://login.10086.cn/html/login/login.html";
             Request request1 = new Request.Builder()
                     .url(url)
                     .header("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9")
@@ -134,10 +134,6 @@ public class CMRequest {
     private void doSendLoginRandombySms(String captchaCode, LoginInfo loginInfo) {
         try {
             Thread.sleep(random.nextInt(500));
-//            List<okhttp3.Cookie> cookieStore = loginInfo.getCookieList();
-//            okhttp3.Cookie.Builder builder = new okhttp3.Cookie.Builder().name("CITY_INFO").value("100|10").domain("login.10086.cn").path("/");
-//            cookieStore.add(builder.build());
-
             // 为了拿到sendflag的cookie
            String url = "https://login.10086.cn/loadSendflag.htm?timestamp=";
             Request request1 = new Request.Builder()
@@ -147,13 +143,6 @@ public class CMRequest {
             Response response1 = getClient(loginInfo).newCall(request1).execute();
             response1.body().string();
 
-            url = "https://login.10086.cn/genqr.htm";
-            Request request2 = new Request.Builder()
-                    .url(url)
-                    .get()
-                    .build();
-            Response response2 = getClient(loginInfo).newCall(request2).execute();
-            response2.body().string();
 
             url = "https://login.10086.cn/checkUidAvailable.action";
             RequestBody formBodyCheck = new FormBody.Builder()
@@ -166,6 +155,16 @@ public class CMRequest {
                     .build();
             Response response3 =getClient(loginInfo).newCall(request3).execute();
             response3.body().string();
+
+            url = "https://login.10086.cn/genqr.htm";
+            Request request2 = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .build();
+            Response response2 = getClient(loginInfo).newCall(request2).execute();
+            response2.body().string();
+
+
 
             Thread.sleep(random.nextInt(500));
             // 查看手机号是否需要短信
@@ -286,7 +285,6 @@ public class CMRequest {
             System.out.println("adasdasdasdadsadsad"+backurl);
 
             Thread.sleep(2000);
-            String pass = "123456";
             String password = encryptPassword(pass);
             System.out.println(password);
             String url = "https://login.10086.cn/login.htm";
@@ -297,9 +295,9 @@ public class CMRequest {
                     .add("pwdType", "01")
                     .add("smsPwd", smsCode)
                     .add("inputCode", "")
-                    .add("backUrl", backurl)
+                    .add("backUrl", "https://shop.10086.cn/i/")
                     .add("rememberMe", "0")
-                    .add("channelID", channelId+"")
+                    .add("channelID", "12003")
                     .add("protocol", "https:")
                     .add("loginMode", "01")
                     .add("timestamp", String.valueOf(System.currentTimeMillis()))
@@ -321,6 +319,10 @@ public class CMRequest {
             Response response6 =getClient(loginInfo).newCall(request6).execute();
             String content = response6.body().string();
             System.out.println(content);
+            List<Cookie> cookieList = loginInfo.getCookieList();
+            for (Cookie cookie : cookieList){
+                System.out.println(cookie.name()+"="+cookie.value());
+            }
         } catch (Exception e) {
 
             e.printStackTrace();
