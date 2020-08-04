@@ -44,7 +44,7 @@ docker amages
 
 卸载docker
 $ sudo yum remove docker-ce docker-ce-cli containerd.io
-$ sudo rm -rf /var/lib/docker  //资源文件
+$ sudo rm -rf /var/lib/docker  //资源文件 移除融
 
 
 docker 默认的资源路径
@@ -414,3 +414,44 @@ denied: requested access to the resource is denied
 
 
 ---------docker小结
+
+-------docker网络--------------
+清空所有环境
+ip addr
+lo：本机回环地址
+etho：腾讯活着阿里的哪网地址
+docker0：docker地址
+
+-------docker是如何处理容器网络的
+1。启动一个tomcat：
+[root@VM_0_16_centos tomcat]# docker run -d -P --name tomcat10 tomcat
+2。运行
+[root@VM_0_16_centos tomcat]# docker exec -it tomcat10 ipaddr
+
+
+linux 可以ping通docker容器内部
+
+原理----
+我们每启动一个docker容器，docker就会给容器分配一个ip，就会有一个docker0桥接模式，
+
+又启动了一个容器
+发现网卡都是一对一对的
+veth-pair就是一对虚拟设备接口，他们都是成堆出现。一段协议彼此想连
+
+
+------速度速度、---
+docker重启变ip 如何mysql重启那就会有问题  通过名字访问
+[root@VM_0_16_centos ~]# docker run -d -P --name tomcat13 --link tomcat10 tomcat
+[root@VM_0_16_centos ~]# docker exec -it tomcat13 ping tomcat10
+PING tomcat10 (172.18.0.7) 56(84) bytes of data.
+64 bytes from tomcat10 (172.18.0.7): icmp_seq=1 ttl=64 time=0.090 ms
+正向可以ping通 反向不可以哦！～～～～～
+使用  --link可以使用名字互通
+
+docker exec -it tomcat13 cat /etc/hosts
+
+不建议使用 --link  =====================
+
+
+
+////////---------

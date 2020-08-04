@@ -1,0 +1,477 @@
+**查看服务器版本**
+
+    uname -r
+    
+**查看配置信息**
+
+    cat /etc/os-release
+
+`镜像`：image 好比一个模版通过模版创建容器服务 可以创建多个容器 最后项目在容器运行
+
+`容器`：container 通过镜像来创建 可以理解为一个简易的linux系统
+
+`仓库`：repository 仓库存放镜像地方 私有和公有
+
+**安装docker**
+
+    "CentOS Linux 7 (Core)
+    
+    https://docs.docker.com/engine/install/centos/
+
+**1,写在旧的版本**
+
+    sudo yum remove docker \
+                      docker-client \
+                      docker-client-latest \
+                      docker-common \
+                      docker-latest \
+                      docker-latest-logrotate \
+                      docker-logrotate \
+                      docker-engine
+**2，需要安装的包**
+
+    sudo yum install -y yum-utils
+    
+**3，设置镜像的仓库**
+
+    sudo yum-config-manager \
+        --add-repo \
+        https://download.docker.com/linux/centos/docker-ce.repo 
+     //国外的不推荐使用 贼慢
+    http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo` `
+    //阿里云的
+
+**4 安装docker内容相关**
+
+    sudo yum install docker-ce docker-ce-cli containerd.io
+
+**5 启动docker**
+
+    sudo systemctl start docker
+**6 安装helloworld**
+
+    $ sudo docker run hello-world
+**7 查看images镜像**
+
+    docker amages
+**卸载docker**
+
+    $ sudo yum remove docker-ce docker-ce-cli containerd.io
+    $ sudo rm -rf /var/lib/docker  //资源文件 移除融
+**docker 默认的资源路径**
+
+    /var/lib/docker
+**底层原理**：
+
+     1   docker是如何工作的
+        docker是一个client-servie结构的系统，docker的守护进程运行在主机上，通过socket从客户端访问
+        dockerService接收到docker-client的指令，执行这个命令
+     2 docker比vm快
+        docker有着比虚拟机更少的抽象层
+        docker新建一个容器的时候不需要像虚拟机一样重新加载一个操作系统内核
+
+**docker镜像的命令**：
+
+    docker pull 下载 分层下载 重复的部分不会下载
+    删除镜像命令docker rmi -f $(docker images -aq)
+
+**容器命令**：
+
+    docker run -it 交互式运行进入容器查看内容
+                -p 指定端口
+    docker ps 列出正在运行的容器
+               -a列出历史运行的
+
+**docker日志**
+
+    docker logs -f -t tail 10 imageid 限时行数日志
+    docker logs -ft image 显示所有的
+
+**自己编写一个脚本 输入日志**
+
+    docker run -d mysql  /bin/sh -c "while true;do echo zht;sleep 1;done"
+
+**docker进程**
+
+    docker top
+**查看镜像元数据**
+
+    docker inspect imagesId
+
+**进入当前正在运行中的容器**
+
+    docker exec -it 容器id /bin/bash  // 进入一个容器后开启一个新的终端，可以在里面操作
+    docker attch   进入一个正在运行的容器 不会启动新的终端
+
+
+---------**从容器内拷贝到主机上**
+
+    docker cp  容器id:目录/文件名字 主机目录
+
+------**安装nginx**
+
+    docker pull nginx
+    docker run -d --name nginx01 -p 3344:80 nginx
+
+------**安装tomcat**
+
+    发现问题 linux命令少了
+    没有webapps下面没有文件 需要拷贝 阿里云镜像的问题 默认是最小的镜像，所有不必要的全部剔除掉 保证最小的运行环境
+
+--------**安装elasticsearch**
+
+    爆露的端口很多 十分好耗内存
+    数据需要放在安全目录 挂载
+    --net somenetwork 网络配置
+    -e 环境参数的修改
+    $ docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms64m -Xmx521m" elasticsearch:7.6.2
+
+**docker stats 查看cpu状态**
+
+-----**管理镜像的工具**
+
+    portainer docker图形化管理工具 提供一个后台面板供我们做操
+
+    docker镜像加载原理
+    ufs 联合文件系统
+    bootfs 底层内核
+    rootfs
+------**docker分层理解**
+
+    docker镜像都是只读的 当容器启东时 一个新的可写层呗加载到镜像顶部
+    这一层我们通常说的容器，容器一下就叫镜像
+    我们的操作都在容器层
+
+--------------**commit镜像**
+
+    docker commit 提交容器成为一个新的容器
+    例子是tomca他 将webapps.dist 文件拷贝到webapps上面  然后提交  以后使用修改后的镜像
+    docker commit -a 作者 -m 提交的信息  镜像id  tag
+    docker commit -a 'zht' -m 'add webapps' f16af267e534 tomcat02
+
+-------------**容器数据卷**
+
+    将应用和环境打包成一个镜像
+    数据 如果数据都在容器中 那么容器删除 数据丢失  怎么解决
+    容器之间可以有一个共享的技术  docker产生的数据可以同步到本地 这就是卷技术
+    目录的挂载 将容器的内的目录 挂载到linux上
+    为何要用卷 就是为了持久化 和同步操作
+
+----**使用数据卷**
+
+    方式1：直接使用命令挂载
+    docker run -it -v 主机目录:容器内目录
+    docker run -it -v /zht/ceshi:/zht nginx /bin/bash
+    新建一个
+    touch text.java  容器和主机都有这个文件
+
+----**mysql数据实战**
+
+    mysql数据持久化
+    docker pull mysql:5.7
+    运行容器 挂载
+    安装mysql需要配置密码
+    -d 后台运行
+    -p 端口映射
+    -v 卷挂载
+    -e 环境配置
+
+    [root@VM_0_16_centos ~]#
+
+    docker run -d -p 3310:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 --name mysql01 mysql:5.7
+    启动以后测试链接是否成功
+
+
+
+----**具名挂载和匿名挂载**
+--**匿名挂载**
+
+    docker run -d --name nginx01  -v /ect/nainx nginx
+    docker volume ls 查看所有卷情况
+    我们载-v的时候写了容器内的路径 没有容器外的路径
+    
+    --具名挂载
+    docker run -d -P --name nginx02  -v juming-nginx:/etc/nginx nginx
+    所有的卷没有指定目录的情况下都是在/var/lib/docker/volumes/xxx_data
+    我们通过具名挂在很方便找到我们的卷 大多数情况下我们都是用具名挂载
+    --如何确定是具名挂载 匿名挂在 指定路径挂载
+    -v 容器内路径 #匿名挂载
+    -v 卷名：容器内路径 #具名挂在
+    -v /宿主机路径：容器内路径 #路径挂载
+
+
+----------**ro只读 rw 可读可写  改变读写权限**
+
+    docker run -d -P --name nginx02  -v juming-nginx:/etc/nginx:ro nginx
+    docker run -d -P --name nginx02  -v juming-nginx:/etc/nginx:rw nginx
+
+-------**初识dockerfile**
+
+    构建docker镜像   命令脚本
+    创建一个dockerfile文件
+    FROM centos
+    VOLUME ["volume01","volume02"]
+    CMD echo "---end----
+    CMD /bin/bash
+    
+    构建自己的镜像。。
+    docker build -f dockerfile -t zht/centos .
+    
+    启动自己的容器
+    docker run -it df44fada1889 /bin/bash
+    查看同步目录
+    
+    docker inspect imagesid
+    
+    查看里面有个mounts
+    映射的目录
+
+------**数据卷容器**
+
+    多个mysql同步数据
+    docker run -it --name docker01 df44fada1889
+    [root@VM_0_16_centos ~]# docker run -it --name docker02 --volumes-from docker01 df44fada1889
+
+    在docker01创建
+    [root@b129a66f6a6b volume01]# touch docker01.text
+    发现docker02也存在
+
+
+------**dockerfile**
+
+    构建步骤
+    1。编写一个dockfile文件
+    2。docker build 构建一个镜像
+    3。docker run 运行一个镜像
+    4。docker push发布镜像（dockerhub , 阿里云镜像）
+    
+    ----dockerfile构建过程
+    基础知识：
+    1。每个保留关键字（指令） 都是必须大写字母
+    2。执行从上倒下执行
+    3。#表示注释
+    4。每一个指令都会创建提交一个新的镜像层，并提交
+
+    步骤：
+    dockerfile面向开发的发布项目 做镜像
+    dockerfile 构建文件 相当于源代码
+    dockerimages 通过dockerfile构建生成的镜像，最终发布运行的产品
+
+
+----**dockerfile指令**
+
+    FROM                #基础镜像  一切从这里构建
+    MAINTAINER          # 镜像是谁写的 维护者姓名
+    RUN                 #镜像构建的时候需要运行的命令
+    ADD                 #步骤  搭建tomcat镜像 需要添加tomcat压缩包
+    WORKDIR             #镜像的工作目录
+    VOLUMES             #容器卷 挂载位置
+    EXPOSE              #保留端口设置
+    CMD                 #指定容器启动 运行的命令  只有最后一个命令生效 可被替代
+    ENTRYPOINT          #指定容器启动 运行的命令  可以追加命令
+    ONBUILD             #当构建一个被继承dockerfile这个时候会运行ONBUILD的指令
+    COPY                #将我们的文件拷贝到镜像中
+    ENV                 #构建时候设置环境变量
+
+----**构建自己的centos**
+
+    1。编写dockerfile文件
+        FROM CENTOS
+        MAINTAINER zht<1360570982@qq.com>
+        ENV MYPATH /usr/local
+        WORKDIR $MYPATH
+        RUN yum -y install vim
+        RUN yum -y install net-tools
+        EXPOST 80
+        CMD echo $MYPATH
+        CMD echo "---end----"
+        CMD /bin/bash
+    
+    2。构建镜像
+    docker build -f dockerfile -t mycentos:0.1 .
+    
+    3.启动容器
+    docker run -it mycentos:0.1
+    
+    4。查看镜像是如何安装的
+    [root@VM_0_16_centos ~]# docker history a796d745e7a8
+
+
+
+**CMD 和 ENTRTPOINT**
+
+    自己的dockerfile文件
+        FROM centos
+        VOLUME ["volume01","volume02"]
+        CMD echo "---end----
+        CMD /bin/bash
+    1。练习cmd
+        FROM centos
+        CMD ["ls","-a"]
+    2。构建
+    
+     docker build -f dockerfile-cmd -t cmdtest .
+    3。运行
+    [root@VM_0_16_centos mydockerfile]# docker run 372997fe56fe
+
+.
+..
+.dockerenv
+bin
+dev
+etc
+home
+lib
+lib64
+lost+found
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+[ro
+
+
+---------**dockerdilfe制作tomcat镜像**
+
+    1。准备镜像文件tomcat压缩包 jdk压缩包
+    2。编写dockerfile文件
+    
+    ---------------------安装tomcat
+    FROM centos
+    MAINTAINER zhenghetian<1360570982@qq.com>
+    COPY readme.txt /usr/local/readme.txt
+    ADD jdk-8u231-linux-x64.tar(1).gz /usr/local
+    ADD apache-tomcat-9.0.37.tar.gz /usr/local
+    RUN yum -y install vim
+    ENV MYPATH /usr/local
+    WORKDIR $MYPATH
+    
+    ENV JAVA_HOME /usr/local/jdk1.8.0_231
+    ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+    ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.37
+    ENV CATALINA_BASE /usr/local/apache-tomcat-9.0.37
+    ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin
+    
+    EXPOSE 8080
+    
+    CMD /usr/local/apache-tomcat-9.0.37/bin/startup.sh && tail -F  /usr/local/apache-tomcat-9.0.37/bin/logs/catalina.out
+    
+    -------------**构建**
+    docker build -t dittomcat
+
+    -------**启动容器**
+        docker run -d -p 9090:8080 --name zhttomcat -v /zht/tomcat/test:/usr/local/apache-tomcat-9.0.37/webapps/test -v /zht/tomcat/tomcatlogs/:/usr/local/apache-tomcat-9.0.37/logs dittomcat
+    
+    ---**访问测试**
+    
+    ----**发布项目**
+    xml======
+        <?xml version="1.0" encoding="UTF-8"?>
+        <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+                 http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+                 version="2.4">
+    
+        </web-app>
+    
+    
+    jsp=====
+        <%@ page language="java" contentType="text/html; charset=UTF-8"
+            pageEncoding="UTF-8"%>
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8">
+        <title>zht.hello</title>
+        </head>
+        <body>
+        Hello World!<br/>
+        <%
+        System.out.println("你的 IP 地址 " + request.getRemoteAddr());
+        %>
+        </body>
+        </html>
+    
+    ------**发布镜像到dockerhub**
+    1,,首先登陆
+    2，，确定账号可以登陆
+    3。。在我们自己的服务器提交镜像
+
+     ----命令
+     [root@VM_0_16_centos test]# docker login -u cndockerstart
+
+     失败了
+    [root@VM_0_16_centos test]# docker push dittomcat
+    The push refers to repository [docker.io/library/dittomcat]
+    89dd50d692ef: Preparing
+    4ff42b6afce1: Preparing
+    fa349ab4f099: Preparing
+    9cca6ade7505: Preparing
+    eb29745b8228: Preparing
+    denied: requested access to the resource is denied
+    
+    -------docker tag 给镜像来个标签
+    解决问题
+    [root@VM_0_16_centos test]# docker tag f7d8acf21628  cndockerstart/tomcat:2.0
+    
+    ---docker push
+    [root@VM_0_16_centos test]# docker push cndockerstart/tomcat:2.0
+
+
+
+-------**docker网络**--------------
+
+    清空所有环境
+    ip addr
+    lo：本机回环地址
+    etho：腾讯活着阿里的哪网地址
+    docker0：docker地址
+    
+    -------docker是如何处理容器网络的
+    1。启动一个tomcat：
+    [root@VM_0_16_centos tomcat]# docker run -d -P --name tomcat10 tomcat
+    2。运行
+    [root@VM_0_16_centos tomcat]# docker exec -it tomcat10 ipaddr
+    
+    
+    linux 可以ping通docker容器内部
+    
+    原理----
+    我们每启动一个docker容器，docker就会给容器分配一个ip，就会有一个docker0桥接模式，
+    
+    又启动了一个容器
+    发现网卡都是一对一对的
+    veth-pair就是一对虚拟设备接口，他们都是成堆出现。一段协议彼此想连
+
+
+------**--link容器互联**、---
+
+    docker重启变ip 如何mysql重启那就会有问题  通过名字访问
+    [root@VM_0_16_centos ~]# docker run -d -P --name tomcat13 --link tomcat10 tomcat
+    [root@VM_0_16_centos ~]# docker exec -it tomcat13 ping tomcat10
+    PING tomcat10 (172.18.0.7) 56(84) bytes of data.
+    64 bytes from tomcat10 (172.18.0.7): icmp_seq=1 ttl=64 time=0.090 ms
+    正向可以ping通 反向不可以哦！～～～～～
+    使用  --link可以使用名字互通
+    
+    docker exec -it tomcat13 cat /etc/hosts
+    
+    不建议使用 --link  =====================
+
+
+
+///docker
+**docker自定义网络**
+
+    查看所有网络*docker network ls*
+
+
