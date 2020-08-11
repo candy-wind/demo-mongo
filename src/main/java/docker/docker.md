@@ -145,7 +145,7 @@
 --------------**commit镜像**
 
     docker commit 提交容器成为一个新的容器
-    例子是tomca他 将webapps.dist 文件拷贝到webapps上面  然后提交  以后使用修改后的镜像
+    例子是tomcat 将webapps.dist 文件拷贝到webapps上面  然后提交  以后使用修改后的镜像
     docker commit -a 作者 -m 提交的信息  镜像id  tag
     docker commit -a 'zht' -m 'add webapps' f16af267e534 tomcat02
 
@@ -473,5 +473,62 @@ var
 **docker自定义网络**
 
     查看所有网络*docker network ls*
+    [root@VM_0_16_centos tomcat]# docker network inspect 5bf76f2a6798//网络的id 
+    **`__`_网络模式_`__`**：
+        bridge： 桥接模式docker（默认）
+        none：不配置啊网络
+        host：合宿主机共享网络
+        container：容器网络联通（不建议了）
+    
+    ****测试****  
+    默认是有 --net bridge
+    docker run -d -P --name tomcat01 tomcat
+    docker run -d -P --name tomcat01 --net bridge tomcat
+       
+       
+       
+    --driver bridge 桥接模式
+    --subnet 192.168.0.0/16 子网
+    --gateway 192.168.0.1 网关
+       
+    ******我们自定义一个网络******：
+    [root@VM_0_16_centos tomcat]# docker network create --driver bridge --subnet 192.168.0.0/16 --gateway 192.168.0.1 mynet 
+    
+    ****查看是否存在了****： 
+    [root@VM_0_16_centos tomcat]# docker network ls
+    5bf76f2a6798        bridge              bridge              local
+    47630ed4ddaf        host                host                local
+    5972e3128e50        mynet               bridge              local
+    e888152f8895        none                null                local
+    
+    **********发布自己的tomcat到自己的创建的网络上**********
+     
+    [root@VM_0_16_centos tomcat]# docker run -d -P --name tomcat-net-01 --net mynet tomcat
+    3f865a665771fca9be22523757a1c3d9c5ff4e29c87cab8ccf93f60eefa5cd14
+    [root@VM_0_16_centos tomcat]# docker run -d -P --name tomcat-net-02 --net mynet tomcat 
+    b2c89f4deaf1d7a80dc39cca55fd19484d17c5f7ff5eb26665d24dfc04faabd4
+    
+    ********在查看自己的网络 发现tomcat已经到自己的网络了 如图 自定义网络.png********
+    [root@VM_0_16_centos tomcat]# docker network inspect mynet                            
+    
+    ********再次测试 不实用--link也可以相互访问了********
+    [root@VM_0_16_centos tomcat]# docker exec -it tomcat-net-01 ping 192.168.0.3
+    PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.
+    64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=0.068 ms
+    64 bytes from 192.168.0.3: icmp_seq=2 ttl=64 time=0.045 ms
 
+    [root@VM_0_16_centos tomcat]# docker exec -it tomcat-net-02 ping 192.168.0.2
+    PING 192.168.0.2 (192.168.0.2) 56(84) bytes of data.
+    64 bytes from 192.168.0.2: icmp_seq=1 ttl=64 time=0.044 ms
+    64 bytes from 192.168.0.2: icmp_seq=2 ttl=64 time=0.045 ms
+    
+    
+**spring boot为服务打包docker镜像**
+    
+    1 构建Spring boot项目
+    2 打包应用  
+    3 编写dockerfile文件
+    4 构建镜像
+    5 发布运行
+    
 
