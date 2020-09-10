@@ -11,13 +11,32 @@ idea----jdk --javac----(jdk里面有javac 和 java).class-----------------------
 
 线程共享区（堆）分为
 1  方法区（元数据空间，永久代）：
-    类信息，方法，常量，静态变量
-
+    类信息，方法，常量，静态变量，运行时常量池
 
 
 2  java堆
+    一个jvm只有一个堆内存，堆内存的大小可以调节
+    三个区：
+        新生区：
+            类：诞生和成长的地方
+          生成区Eden：进行垃圾回收 发现有线程活着直接进入幸存区0区 继续往下。。
+          幸存区：
+              From幸存0区：
+              To幸存1区：
 
+        老年区：
+        永久区：
+            jdk1。6之前：永久带，常量池是在方法区
+            jdk1。7：永久带慢慢退化，去永久带，常量池在堆中
+            jdk1。8：无永久代，常量池在元空间
+            存放jdk自身携带的class对象，Interface元数据，存储的是java运行时的一些环境～
+            这个区域不存在垃圾回收
 
+改变堆大小：-Xms1024m -Xmx1024m -XX:+PrintGCDetails
+
+///默认情况下分配的总内存是电脑内存的1/4  初始化内存是1/64
+
+gc垃圾回收主要在eden和老年区
    public class User{
         private int a;
         private int b;
@@ -29,16 +48,29 @@ idea----jdk --javac----(jdk里面有javac 和 java).class-----------------------
 
 
  非共享区（java栈）
-1 程序计数器
-
+1 程序计数器 program counter register
+线程私有  每一个线程都有一个  就是一个指针 指向方法区的字节码
 
 2 本地方法栈
-
+    native方法
 
 3  java虚拟机栈
+    局部变量，操作数栈，方法出口
 
+native关键字：
+调用底层c语言的库
 
 
 类加载器
 
 bootstrap 核心加载器 jdk/jre /bin /rt.jar
+
+jvm调优
+    jps显示java进程
+    jstack查看当前线程
+    //OOM解决：
+    1。尝试扩大堆内存查看结果
+    2。分析内存，看一下那个地方出现了问题
+jvm可视化工具
+    jconsole
+
