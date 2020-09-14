@@ -13,6 +13,10 @@ public class HashMapTest {
     public static void main(String[] args) {
         HashMap hashMap = new HashMap();
         hashMap.put("a",2);
+        hashMap.put("a",3);
+        for (Object iterable:hashMap.keySet()){
+            System.out.println(iterable);
+        }
 
     }
 }
