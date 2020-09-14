@@ -1,6 +1,6 @@
 package jvm;
 
-import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * @Author candy-wind
@@ -20,8 +20,32 @@ public class TestOOM {
     public static void main(String[] args) {
 //测试oom代码zhen shi
 
-
+        //测试代码一：
         //改变堆大小：-Xms1024m -Xmx1024m -XX:+PrintGCDetails
+//        String str = "zht097808080808";
+//        while (true){
+//            str +=str + new Random().nextInt(888888)+new Random().nextInt(88888888);
+//        }
+        byte[] array = new byte[1024 * 1024];
 
+        //测试代码二
+        //改变大小 -Xms1m -Xmx8m -XX:+HeapDumpOnOutOfMemoryError
+        ArrayList<TestOOM> list = new ArrayList<>();
+        int count=0;
+        try {
+            while (true){
+                list.add(new TestOOM());
+                count=count+1;
+            }
+        } catch (Error e) {
+            System.out.println(count);
+            e.printStackTrace();
+        }
     }
+
+
+
+
+
+
 }
