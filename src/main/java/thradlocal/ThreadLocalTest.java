@@ -11,12 +11,12 @@ public class ThreadLocalTest {
 
 //
 //
-//    //本地线程变量
-//    public static void main(String[] args) {
-//        ThreadLocal threadLocal = new ThreadLocal();
-//        threadLocal.set("1");
-//        threadLocal.remove();
-//        threadLocal.get();
-//    }
+    //本地线程变量
+    public static void main(String[] args) {
+        ThreadLocal threadLocal = new ThreadLocal();
+        threadLocal.set("1");
+        threadLocal.remove();
+        threadLocal.get();
+    }
 
 }

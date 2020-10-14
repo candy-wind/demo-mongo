@@ -31,10 +31,10 @@ public class SynchronizedDemo implements Runnable {
 
     @Override
     public void run() {
-//        synchronized (SynchronizedDemo.class){
+        synchronized (SynchronizedDemo.class){
             for (int i = 0; i < 1000000; i++)
                 count++;
-//        }
+        }
 
     }
 

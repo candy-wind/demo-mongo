@@ -10,12 +10,12 @@
 
     <!--    <bean id="user" class="com.example.demomongo.springcontext.User" scope="prototype"></bean>-->
 <!--&lt;!&ndash;    静态工厂方式创建&ndash;&gt;-->
-<!--    <bean id="bean" class="com.example.demomongo.springcontext.BeanFactory" factory-method="getBean"></bean>-->
+    <bean id="bean" class="com.example.demomongo.springcontext.BeanFactory" factory-method="getBean"></bean>
+<!--    构造方法创建bean-->
+    <bean id="demo1" class="com.example.demomongo.param.PropertyDemo">
+        <constructor-arg name="username" value="xiaowang"></constructor-arg>
 
-<!--    <bean id="demo1" class="com.example.demomongo.param.PropertyDemo">-->
-<!--        <constructor-arg name="username" value="xiaowang"></constructor-arg>-->
-
-<!--    </bean>-->
+    </bean>
 <!--    <bean id="book" class="com.example.demomongo.param.Book">-->
 <!--        <property name="bookname" value="平凡的世界"></property>-->
 <!--    </bean>-->
