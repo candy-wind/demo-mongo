@@ -17,6 +17,7 @@ public class ThreadLocalTest {
         threadLocal.set("1");
         threadLocal.remove();
         threadLocal.get();
+//            volatile
     }
 
 }
